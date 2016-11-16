@@ -9,7 +9,6 @@ body {
 .navbar {
 	background-color: #1A2930;
 	border: 0px;
-	position: absolute;
 }
 
 .navbar-form {
@@ -41,7 +40,9 @@ body {
 	height: 100vh;
 	background: white;
 	padding-top: 50px;
-	position: absolute;
+	position: fixed;
+	top: 0;
+	left: 0;
 }
 
 

@@ -1,0 +1,49 @@
+table {
+	width: 100%;
+	padding: 10px;
+}
+
+tr {
+	border-top: 1px solid black;
+}
+
+tr:last-child {
+	border-bottom: 1px solid black;
+}
+
+th:nth-child(3) {
+	text-align: center;
+}
+
+th {
+	padding: 10px;
+}
+
+h1 {
+	padding-left: 10px;
+}
+
+#submit, #submit:focus {
+	margin-top: 5px;
+	border: 0px solid black;
+	background: #1A2930;
+	color: #C5C1C0;
+	outline: none;
+}
+
+#submit:hover, #submit:active:focus{
+	background: #F7CE3E;
+	color: #1A2930;
+	box-shadow: none;
+}
+
+.profile-image {
+	max-width: 200px;
+}
+
+/*
+#C5C1C0	grey
+#0A1612	black
+#1A2930	navy
+#F7CE3E	yellow
+*/
