@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Tracker</title>
+
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="css/standard.css" rel="stylesheet">
+  <link href="css/calendar.css" rel="stylesheet">
+
+</head>
+<body>
+  <nav class="navbar navbar-default navbar-fixed-top">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" 
+              data-toggle="collapse" 
+              data-target="#navbar-collapse-1" 
+              aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <!-- Use a "home" glyphicon as a logo. -->
+      <a class="navbar-brand" href="#">
+        <!-- This is how you display a glyphicon. -->
+        <span class="glyphicon glyphicon-home"></span>
+      </a>
+    </div>
+
+    <div class="collapse navbar-collapse" id="navbar-collapse-1">
+      <div class="navbar-right">
+        <div class="navbar-form pull-right">
+          <a href="#" role="button" class="btn btn-default">Settings</a>
+          <a href="#" role="button" class="btn btn-default">Logout</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="col-xs-12 col-md-2 col-sm-3" id="stats">
+    <div class="row">
+      <div class="col-sm-12">
+        <h1>Date</h1>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-sm-12">
+        <a href="#" role="button" class="btn btn-default" id="graph">
+          there will be a graph here
+        </a>
+      </div>
+    </div>
+    <hr>
+    <div class="row">
+      <div class="col-sm-12">
+        There will be some more information about your day here
+      </div>
+    </div>
+  </div>
+  <div class="col-xs-12 col-md-2 col-sm-3"></div>
+  <div class="col-md-10 col-sm-9" id="changing-data">
+    <div class="row">
+      <div class="col-md-1 visible-md visible-lg"></div>
+      <div class="col-sm-12 col-md-10">
+        <div class="row">
+          <div class="col-sm-2">
+            <span class="glyphicon glyphicon-menu-left pull-right cal-arrow"></span>
+          </div>
+          <div class="col-sm-8">
+            <div class="panel panel-default" id="calendar-panel">
+              <div class="panel-body">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <h1>Month</h1>
+                  </div>
+                </div>
+                <hr>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <ul class="cal" id="weekdays">
+                      <li>Sun</li>
+                      <li>Mon</li>
+                      <li>Tue</li>
+                      <li>Wed</li>
+                      <li>Thu</li>
+                      <li>Fri</li>
+                      <li>Sat</li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-12">
+                    <ul class="cal" id="days">
+                      <li>1</li>
+                      <li>2</li>
+                      <li>3</li>
+                      <li>4</li>
+                      <li>5</li>
+                      <li>6</li>
+                      <li>7</li>
+                      <li>8</li>
+                      <li>9</li>
+                      <li>10</li>
+                      <li>11</li>
+                      <li>12</li>
+                      <li>13</li>
+                      <li>14</li>
+                      <li>15</li>
+                      <li>16</li>
+                      <li>17</li>
+                      <li>18</li>
+                      <li>19</li>
+                      <li>20</li>
+                      <li>21</li>
+                      <li>22</li>
+                      <li>23</li>
+                      <li>24</li>
+                      <li>25</li>
+                      <li>26</li>
+                      <li>27</li>
+                      <li>28</li>
+                      <li>29</li>
+                      <li>30</li>
+                      <li>31</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-2">
+            <span class="glyphicon glyphicon-menu-right cal-arrow"></span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-1 visible-md visible-lg"></div>
+    </div>
+  </div>
+</body>
+</html>
