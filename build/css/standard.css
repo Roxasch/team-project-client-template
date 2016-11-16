@@ -1,0 +1,54 @@
+body {
+	background: #C5C1C0;
+}
+
+#changing-data {
+	margin-top: 60px;
+}
+
+.navbar {
+	background-color: #1A2930;
+	border: 0px;
+	position: absolute;
+}
+
+.navbar-form {
+	border: 0px solid black;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.navbar-right a, .navbar-right a:focus {
+	border: 0px solid black;
+	background: transparent;
+	color: #C5C1C0;
+	outline: none;
+}
+
+.navbar-right a:hover, .navbar-right a:active:focus{
+	background: #F7CE3E;
+	color: #1A2930;
+	box-shadow: none;
+}
+
+#graph {
+	width: 100%;
+	height: 200px;
+	overflow: hidden;
+}
+
+#stats {
+	height: 100vh;
+	background: white;
+	padding-top: 50px;
+	position: absolute;
+}
+
+
+
+/*
+#C5C1C0	grey
+#0A1612	black
+#1A2930	navy
+#F7CE3E	yellow
+*/
