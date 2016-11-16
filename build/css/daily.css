@@ -1,0 +1,22 @@
+.data {
+	margin-top: 3px;
+}
+
+.media-left {
+	border-right: 1px solid black;
+}
+
+.media {
+	border: 1px solid black;
+}
+
+.glyphicon-plus {
+	font-size: 20px;
+}
+
+/*
+#C5C1C0	grey
+#0A1612	black
+#1A2930	navy
+#F7CE3E	yellow
+*/
