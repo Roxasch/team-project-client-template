@@ -17,14 +17,14 @@ body {
 	padding-bottom: 0px;
 }
 
-.navbar-right a, .navbar-right a:focus {
+.navbar-right button, .navbar-right button:focus {
 	border: 0px solid black;
 	background: transparent;
 	color: #C5C1C0;
 	outline: none;
 }
 
-.navbar-right a:hover, .navbar-right a:active:focus{
+.navbar-right button:hover, .navbar-right button:active:focus{
 	background: #F7CE3E;
 	color: #1A2930;
 	box-shadow: none;

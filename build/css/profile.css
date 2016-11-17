@@ -23,6 +23,11 @@ h1 {
 	padding-left: 10px;
 }
 
+input {
+	width: 100%;
+	text-indent: 4px;
+}
+
 #submit, #submit:focus {
 	margin-top: 5px;
 	border: 0px solid black;
@@ -41,6 +46,13 @@ h1 {
 	max-width: 200px;
 }
 
+.progress {
+	border-radius: 0px;
+}
+
+.progress > p {
+	color: white;
+}
 /*
 #C5C1C0	grey
 #0A1612	black
