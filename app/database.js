@@ -11,6 +11,11 @@ var initialData = {
       "_id": 1,
       "username": "Kyle Toth",
       "profilePic": "img/blank-profile.png"
+    },
+    "2": {
+      "_id": 2,
+      "username": "Someone",
+      "profilePic": "img/blank-profile.png"
     }
   },
   "goals": {
@@ -24,13 +29,21 @@ var initialData = {
     ]
   },
   "messages": {
-    "1": [
-      {
-        "_id": 1,
-        "contents": "this is a sample message",
-        "author": 1
-      }
-    ]
+    "1": {
+      "_id": 1,
+      "content": [
+        {
+          "_id": 1,
+          "contents": "this is a sample message",
+          "author": 1
+        },
+        {
+          "_id": 2,
+          "contents": "this is finally working",
+          "author": 2
+        }
+      ]
+    }
   }
 };
 
@@ -62,6 +75,7 @@ export function readDocument(collection, id) {
  * Emulates writing a "document" to a NoSQL database.
  */
 export function writeDocument(collection, changedDocument) {
+  console.log(changedDocument)
   var id = changedDocument._id;
   // Store a copy of the object into the database. Models a database's behavior.
   data[collection][id] = JSONClone(changedDocument);

@@ -1,6 +1,4 @@
 import React from 'react';
-import Navbar from './navbar';
-import Sidebar from './sidebar';
 import { Link } from 'react-router';
 import CalendarDay from './calendarday';
 
@@ -14,11 +12,9 @@ export default class Calendar extends React.Component {
 
     return (
       <div>
-        <Navbar/>
-        <Sidebar/>
         <link href="css/calendar.css" rel="stylesheet"/>
-        <div className="col-xs-12 col-md-2 col-sm-3"></div>
-        <div className="col-md-10 col-sm-9" id="changing-data">
+        <div className="col-md-1"></div>
+        <div className="col-md-10 col-sm-12" id="changing-data">
           <div className="row">
             <div className="col-md-1 visible-md visible-lg"></div>
             <div className="col-sm-12 col-md-10">

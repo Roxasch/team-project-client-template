@@ -5,13 +5,13 @@ import {readDocument, writeDocument, addDocument} from './database.js';
  * some time in the future with data.
  */
 function emulateServerReturn(data, cb) {
-	console.log(cb)
   setTimeout(() => {
     cb(data);
   }, 4);
 }
 
 export function getProfilePage(id, cb) {
+	if (typeof(cb) === "undefined") return;
 	var profileData = {};
 	profileData.user = readDocument('users', id);
 	profileData.goals = readDocument('goals', id);
@@ -22,13 +22,14 @@ export function getProfilePage(id, cb) {
 
 export function postMessage(id, message, cb) {
 	var messageItem = readDocument('messages', id);
-	messageItem.push({
+	messageItem.content.push({
+		"_id": messageItem.content.length + 1,
 		"author": id,
 		"contents": message
 	});
 	writeDocument('messages', messageItem);
 
-	emulateServerReturn(getProfilePage(id), cb)
+	emulateServerReturn(messageItem, cb)
 }
 
 export function getUsername(id, cb) {
