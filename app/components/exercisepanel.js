@@ -1,24 +1,25 @@
 import React from 'react';
 import { Link } from 'react-router';
 import ExerciseItem from './exerciseitem';
+import { getDayPanelData } from '../server';
 
 export default class ExercisePanel extends React.Component {
 
-  render() {
-    var rows = [];
-    for (var i=0; i<6; i++) {
-      rows.push(<ExerciseItem key={i}/>);
+  constructor(props) {
+    super(props);
+    this.state = {
+      exercise: []
     }
-    if (rows.length < 1){
-      rows.push(
-        <div className="row" key={'key'}>
-          <div className="col-md-12 result" key={'key'}>
-            <h1 key={'key'}>No results for this search.</h1>
-          </div>
-        </div>
-      )
-    }
+  }
 
+ 
+  componentWillReceiveProps(nextProps) {
+    getDayPanelData(nextProps.data.food, 'exercise', (exer) => {
+      this.setState({'exercise': exer});
+    })
+  }
+
+  render() {
     return (
       <div className="col-md-6">
         <div className="panel panel-default">
@@ -30,7 +31,11 @@ export default class ExercisePanel extends React.Component {
               </div>
               <div className="col-sm-12">
                 <ul>
-                  { rows }
+                  {this.state.exercise.map((exer) => {
+                    return (
+                      <ExerciseItem key={exer} data={exer} />
+                    )
+                  })}
                 </ul>
               </div>
             </div>

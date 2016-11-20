@@ -1,24 +1,24 @@
 import React from 'react';
 import { Link } from 'react-router';
 import FoodItem from './fooditem';
+import { getDayPanelData } from '../server';
 
 export default class FoodPanel extends React.Component {
 
-  render() {
-    var rows = [];
-    for (var i=0; i<6; i++) {
-      rows.push(<FoodItem key={i}/>);
+  constructor(props) {
+    super(props);
+    this.state = {
+      food: []
     }
-    if (rows.length < 1){
-      rows.push(
-        <div className="row" key={'key'}>
-          <div className="col-md-12 result" key={'key'}>
-            <h1 key={'key'}>No results for this search.</h1>
-          </div>
-        </div>
-      )
-    }
+  }
 
+  componentWillReceiveProps(nextProps) {
+    getDayPanelData(nextProps.data.food, 'food', (food) => {
+      this.setState({'food': food});
+    })
+  }
+
+  render() {
     return (
       <div className="col-md-6">
         <div className="panel panel-default">
@@ -30,7 +30,11 @@ export default class FoodPanel extends React.Component {
               </div>
               <div className="col-sm-12">
                 <ul>
-                  { rows }
+                  {this.state.food.map((food) => {
+                    return (
+                      <FoodItem key={food} data={food} />
+                    )
+                  })}
                 </ul>
               </div>
             </div>

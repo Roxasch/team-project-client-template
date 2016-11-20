@@ -11,7 +11,9 @@ export default class Profile extends React.Component {
         user: {
           username: ''
         },
-        goals:[],
+        goals: {
+          content: []
+        },
         messages: {
           content: []
         },
@@ -35,6 +37,7 @@ export default class Profile extends React.Component {
       if (comment !== "") {
         this.postComment();
         this.setState({newMessage: ""});
+        e.target.value = "";
       }
     }
   }
@@ -73,7 +76,7 @@ export default class Profile extends React.Component {
                   </div>
                   <div className="col-sm-12">
                     <h3>Goals:</h3>
-                    {this.state.goals.map((goal) => {
+                    {this.state.goals.content.map((goal) => {
                       return (
                         <Goals key={goal._id} data={goal}/>
                       )

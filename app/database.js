@@ -19,14 +19,17 @@ var initialData = {
     }
   },
   "goals": {
-    "1": [
-      {
-        "_id": 1,
-        "start": 0,
-        "goal": 100,
-        "current": 50
-      }
-    ]
+    "1": {
+      "_id": 1,
+      "content": [
+        {
+          "_id": 1,
+          "start": 0,
+          "goal": 100,
+          "current": 50
+        }
+      ]
+    }
   },
   "messages": {
     "1": {
@@ -43,6 +46,48 @@ var initialData = {
           "author": 2
         }
       ]
+    }
+  },
+  "days": {
+    "1": {
+      "_id": 1,
+      "users": [
+        {
+          "_id": 1,
+          "food": [1],
+          "exercise": [1]
+        }
+      ]
+    }
+  },
+  "food": {
+    "1": {
+      "_id": 1,
+      "name": "Apple",
+      "calories": 95,
+      "fat": 0.3,
+      "carbs": 25,
+      "protein": 0.5
+    },
+    "2": {
+      "_id": 2,
+      "name": "Banana",
+      "calories": 105,
+      "fat": 0.4,
+      "carbs": 27,
+      "protein": 1.3
+    }
+  },
+  "exercise": {
+    "1": {
+      "_id": 1,
+      "name": "Running (1 mile)",
+      "calories": 100
+    },
+    "2": {
+      "_id": 2,
+      "name": "Walking (1 mile)",
+      "calories": 200
     }
   }
 };
@@ -72,10 +117,20 @@ export function readDocument(collection, id) {
 }
 
 /**
+ * Returns the items that can be searched for.
+ * These items are the food and exercise collections.
+ */
+export function readItems() {
+  var a = [];
+  for (var item in data['food']) a.push(JSONClone(data['food'][item]))
+  for (var item in data['exercise']) a.push(JSONClone(data['exercise'][item]))
+  return a;
+}
+
+/**
  * Emulates writing a "document" to a NoSQL database.
  */
 export function writeDocument(collection, changedDocument) {
-  console.log(changedDocument)
   var id = changedDocument._id;
   // Store a copy of the object into the database. Models a database's behavior.
   data[collection][id] = JSONClone(changedDocument);
