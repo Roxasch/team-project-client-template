@@ -13,7 +13,8 @@ export default class FoodPanel extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    getDayPanelData(nextProps.data.food, 'food', (food) => {
+    getDayPanelData(nextProps.data.data.food, 'food', (food) => {
+      this.setState({'food': []});
       this.setState({'food': food});
     })
   }
@@ -30,9 +31,9 @@ export default class FoodPanel extends React.Component {
               </div>
               <div className="col-sm-12">
                 <ul>
-                  {this.state.food.map((food) => {
+                  {this.state.food.map((food, index) => {
                     return (
-                      <FoodItem key={food} data={food} />
+                      <FoodItem key={index} data={food} />
                     )
                   })}
                 </ul>

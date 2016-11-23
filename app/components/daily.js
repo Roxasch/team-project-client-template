@@ -2,19 +2,52 @@ import React from 'react';
 import FoodPanel from './foodpanel';
 import ExercisePanel from './exercisepanel';
 import AddPanel from './addpanel';
-import { getDayData } from '../server';
+import { getDayData, postDayItem } from '../server';
 
 export default class Daily extends React.Component {
 
   constructor(props) {
     super(props);
+    if (this.props.params.date === undefined) {
+      var currentDate = (new Date().getMonth())*100000
+                       +(new Date().getDate())*1000
+                       +(new Date().getYear());
+    } else {
+      currentDate = this.props.params.date;
+    }
     this.state = {
+      "date": currentDate
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.params.date === undefined) {
+      var currentDate = (new Date().getMonth())*100000
+                       +(new Date().getDate())*1000
+                       +(new Date().getYear());
+    } else {
+      currentDate = nextProps.params.date;
+    }
+    this.setState({'date': currentDate}, () => {
+      this.refresh();
+    });
+  }
+
   componentDidMount() {
-    getDayData(1, 1, (dayData) => {
-      this.setState(dayData);
+    getDayData(1, this.state.date, (dayData) => {
+      this.setState({'data': dayData});
+    })
+  }
+
+  refresh() {
+    getDayData(1, this.state.date, (dayData) => {
+      this.setState({'data': dayData});
+    })
+  }
+
+  handlePost(add, type) {
+    postDayItem(1, this.state.date, add, type, () => {
+      this.refresh();
     })
   }
 
@@ -32,7 +65,7 @@ export default class Daily extends React.Component {
           </div>
           <div className="row">
             <div className="col-sm-12">
-              <AddPanel />
+              <AddPanel onPost={(a,t) => {this.handlePost(a,t)}} />
             </div>
           </div>
         </div>

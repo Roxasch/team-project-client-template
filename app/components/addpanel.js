@@ -45,7 +45,7 @@ export default class AddPanel extends React.Component {
                 <ul>
                   {this.state.items.map((i) => {
                     return (
-                      <SearchReply key={i.name} data={i} />
+                      <SearchReply onPost={(a,t) => {this.props.onPost(a,t)}} key={i.name} data={i} />
                     )
                   })}
                 </ul>

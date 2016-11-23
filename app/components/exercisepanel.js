@@ -14,7 +14,8 @@ export default class ExercisePanel extends React.Component {
 
  
   componentWillReceiveProps(nextProps) {
-    getDayPanelData(nextProps.data.food, 'exercise', (exer) => {
+    getDayPanelData(nextProps.data.data.exercise, 'exercise', (exer) => {
+      this.setState({'exercise': []})
       this.setState({'exercise': exer});
     })
   }
@@ -31,9 +32,9 @@ export default class ExercisePanel extends React.Component {
               </div>
               <div className="col-sm-12">
                 <ul>
-                  {this.state.exercise.map((exer) => {
+                  {this.state.exercise.map((exer, index) => {
                     return (
-                      <ExerciseItem key={exer} data={exer} />
+                      <ExerciseItem key={index} data={exer} />
                     )
                   })}
                 </ul>

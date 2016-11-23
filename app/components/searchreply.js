@@ -39,8 +39,8 @@ export default class SearchReply extends React.Component {
   render() {
     return (
       <li>
-        <a>
-          <div className="row result">
+        <a >
+          <div className="row result"  onClick={() => {this.props.onPost(this.state._id,this.state.type)}}>
             <div className="col-sm-12">
               <div className="media">
                 <div className="media-left">

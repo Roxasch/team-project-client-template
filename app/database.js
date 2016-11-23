@@ -49,15 +49,15 @@ var initialData = {
     }
   },
   "days": {
-    "1": {
-      "_id": 1,
-      "users": [
-        {
+    "1023116": {
+      "_id": 1023116,
+      "users": {
+        "1": {
           "_id": 1,
           "food": [1],
           "exercise": [1]
         }
-      ]
+      }
     }
   },
   "food": {
@@ -67,7 +67,8 @@ var initialData = {
       "calories": 95,
       "fat": 0.3,
       "carbs": 25,
-      "protein": 0.5
+      "protein": 0.5,
+      "type": "food"
     },
     "2": {
       "_id": 2,
@@ -75,19 +76,22 @@ var initialData = {
       "calories": 105,
       "fat": 0.4,
       "carbs": 27,
-      "protein": 1.3
+      "protein": 1.3,
+      "type": "food"
     }
   },
   "exercise": {
     "1": {
       "_id": 1,
       "name": "Running (1 mile)",
-      "calories": 100
+      "calories": 100,
+      "type": "exercise"
     },
     "2": {
       "_id": 2,
       "name": "Walking (1 mile)",
-      "calories": 200
+      "calories": 80,
+      "type": "exercise"
     }
   }
 };
