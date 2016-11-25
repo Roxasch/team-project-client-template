@@ -4,10 +4,67 @@ import CalendarDay from './calendarday';
 
 export default class Calendar extends React.Component {
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentMonth: new Date().getMonth(),
+      currentYear: new Date().getYear()
+    }
+  }
+
+  getMonthName(month) {
+    var m = ["January", "February", "March", "April", 
+             "May", "June", "July", "August", 
+             "September", "October", "November", "December"];
+    return m[month];
+  }
+
+  getDaysInMonth() {
+    return new Date(this.state.currentYear+1900, this.state.currentMonth+1, 0).getDate();
+  }
+
+  getStartDay() {
+    return new Date(this.state.currentYear+1900, this.state.currentMonth, 1).getDay();
+  }
+
+  decreaseMonth() {
+    var m = this.state.currentMonth;
+    var y = this.state.currentYear;
+    m = m-1
+    if (m < 0) {
+      m = 11;
+      y = y-1;
+    }
+    this.setState({"currentYear": y, "currentMonth": m});
+  }
+
+  increaseMonth() {
+    var m = this.state.currentMonth;
+    var y = this.state.currentYear;
+    m = m+1
+    if (m > 11) {
+      m = 0;
+      y = y+1;
+    }
+    this.setState({"currentYear": y, "currentMonth": m});
+  }
+
   render() {
     var rows = [];
-    for (var i=1; i<32; i++) {
-      rows.push(<CalendarDay key={i} data={i}/>);
+    var days = this.getDaysInMonth();
+    var startDate = this.getStartDay();
+    for (var j=0; j<startDate; j++) {
+      rows.push(<a key={100+j}><li className="notDay">.</li></a>);
+    }
+    for (var i=1; i<=days; i++) {
+      rows.push(<CalendarDay key={i} data={{"month": this.state.currentMonth,
+                                            "year": this.state.currentYear, 
+                                            "day": i}}/>);
+    }
+    var totalDays = startDate + days;
+    if (totalDays > 35) totalDays-=7;
+    for (var k=0; k<35-totalDays; k++){
+      rows.push(<a key={200+k}><li className="notDay">.</li></a>);
     }
 
     return (
@@ -19,20 +76,23 @@ export default class Calendar extends React.Component {
             <div className="col-md-1 visible-md visible-lg"></div>
             <div className="col-sm-12 col-md-10">
               <div className="row">
-                <div className="col-sm-2">
-                  <span className="glyphicon glyphicon-menu-left pull-right cal-arrow"></span>
-                </div>
-                <div className="col-sm-8">
+                <div className="col-md-2 visible-md visible-lg"></div>
+                <div className="col-sm-12 col-md-8">
                   <div className="panel panel-default" id="calendar-panel">
                     <div className="panel-body">
-                      <div className="row">
-                        <div className="col-sm-12">
-                          <h1>Month</h1>
+                      <div className="row" >
+                        <div className="col-xs-2" onClick={() => {this.decreaseMonth()}} >
+                          <h1><span className="glyphicon glyphicon-menu-left pull-right cal-arrow"></span></h1>
+                        </div>
+                        <div className="col-xs-8">
+                          <h1 className="month">{ this.getMonthName(this.state.currentMonth) }</h1>
+                        </div>
+                        <div className="col-xs-2" onClick={() =>{this.increaseMonth()}} >
+                          <h1><span className="glyphicon glyphicon-menu-right cal-arrow"></span></h1>
                         </div>
                       </div>
-                      <hr/>
                       <div className="row">
-                        <div className="col-sm-12">
+                        <div className="col-xs-12">
                           <ul className="cal" id="weekdays">
                             <li>Sun</li>
                             <li>Mon</li>
@@ -53,9 +113,6 @@ export default class Calendar extends React.Component {
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="col-sm-2">
-                  <span className="glyphicon glyphicon-menu-right cal-arrow"></span>
                 </div>
               </div>
             </div>

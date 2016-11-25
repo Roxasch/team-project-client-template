@@ -33,7 +33,7 @@ export default class SearchReply extends React.Component {
   }
 
   burnt() {
-    if (this.state.fat === undefined) return ' Burnt'
+    if (this.state.fat === undefined) return ' Burned'
   }
 
   render() {

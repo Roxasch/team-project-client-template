@@ -1,18 +1,15 @@
-#calendar-panel {
-	height: 500px;
-}
-
 .cal {
 	padding-left: 0px;
-}
-
-.cal > li {
-	text-align: center;
 }
 
 #weekdays li {
 	display: inline-block;
 	width: 14.2%;
+}
+
+.notDay {
+	background: #C5C1C0;
+	color: #C5C1C0;
 }
 
 #days li {
@@ -21,22 +18,23 @@
 	height: 60px;
 	padding: 0px;
 	margin: 0px;
-	border: 0px solid black;
+	border: 1px solid #C5C1C0;
 }
 
-#days li:nth-child(7n) {
+.day {
+	background: white;
+	color: black;
+}
+
+#days a:nth-child(7n) li {
 	width: 14.2%;
 }
 
-#days li:nth-child(odd) {
-	background: #C5C1C0;
+.day:hover {
+	background: #F7CE3E;
 }
 
-#days li:nth-child(even) {
-	background: white;
-}
-
-ul {
+ul #weekdays {
 	list-style-type: none;
 	font-size: 0px;
 	border: 1px solid grey;
@@ -44,14 +42,15 @@ ul {
 
 ul li {
 	font-size: 14px;
+	text-align: center;
 }
 
-h1 {
+.month {
 	text-align: center;
 }
 
 .cal-arrow {
-	padding-top: 240px;
+	text-align: center;
 }
 
 /*

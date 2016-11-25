@@ -5,16 +5,16 @@ export default class CalendarDay extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state={
-      key: props.data
-    }
+    this.state=props.data
   }
 
   render() {
     return (
-      <li>
-        { this.state.key }
-      </li>
+      <Link className="l" to={'/date/'+this.state.month+this.state.day+this.state.year} >
+        <li className="day">
+          { this.state.day }
+        </li>
+      </Link>
     )
   }
 }
