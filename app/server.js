@@ -73,19 +73,44 @@ export function getSearchData(name, cb) {
   emulateServerReturn(items, cb);
 }
 
+// need to add to the user...Days array depending on 
+// what it is and if this day is there already
+
 export function postDayItem(id, date, item, type, cb) {
   var dayData = readDocument('days', date);
 
-  console.log(dayData)
   var userData = dayData.users[id];
-  console.log(userData)
   userData[type].push(item);
   writeDocument('days', dayData);
 
-  emulateServerReturn(dayData, cb)
+  var v = checkDay(id, parseInt(date));
+  var change = false;
+  var user = readDocument('users', id);
+  console.log(v)
+  if (v%2 == 0 && type == 'food') {
+    user.FoodDays.push(parseInt(date));
+    change = true;
+  }
+  if (v < 2 && type == 'exercise') {
+    user.ExerDays.push(parseInt(date));
+    change = true;
+  }
+  if (change) writeDocument('users', user);
+
+  emulateServerReturn(dayData, cb);
 }
 
+function checkDay(id, date, cb) {
+  var user = readDocument('users', id);
+  var returnValue = 0;
+  if (user.FoodDays.includes(date)) returnValue+=1;
+  if (user.ExerDays.includes(date)) returnValue+=2;
+  return returnValue;
+}
 
+export function getDay(id, date, cb) {
+  emulateServerReturn(checkDay(id, date, cb), cb);
+}
 
 
 

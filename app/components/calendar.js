@@ -54,17 +54,18 @@ export default class Calendar extends React.Component {
     var days = this.getDaysInMonth();
     var startDate = this.getStartDay();
     for (var j=0; j<startDate; j++) {
-      rows.push(<a key={100+j}><li className="notDay">.</li></a>);
+      rows.push(<a key={100+j}><li className="notDay"></li></a>);
     }
     for (var i=1; i<=days; i++) {
-      rows.push(<CalendarDay key={i} data={{"month": this.state.currentMonth,
-                                            "year": this.state.currentYear, 
-                                            "day": i}}/>);
+      rows.push(<CalendarDay key={this.state.currentMonth*100+i} 
+                             data={{"month": this.state.currentMonth,
+                                    "year": this.state.currentYear, 
+                                    "day": i}}/>);
     }
     var totalDays = startDate + days;
     if (totalDays > 35) totalDays-=7;
     for (var k=0; k<35-totalDays; k++){
-      rows.push(<a key={200+k}><li className="notDay">.</li></a>);
+      rows.push(<a key={200+k}><li className="notDay"></li></a>);
     }
 
     return (
@@ -110,6 +111,20 @@ export default class Calendar extends React.Component {
                             { rows }
                           </ul>
                         </div>
+                      </div>
+                      <div>
+
+                        <div className="row" key={'y'}>
+                          <div className="col-xs-12">
+                            <span className="yellow">●</span> = Food Data
+                          </div>
+                        </div>
+                        <div className="row" key={'b'}>
+                          <div className="col-xs-12">
+                            <span className="blue">●</span> = Exercise Data
+                          </div>
+                        </div>
+
                       </div>
                     </div>
                   </div>

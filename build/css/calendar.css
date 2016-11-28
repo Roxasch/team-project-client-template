@@ -2,6 +2,10 @@
 	padding-left: 0px;
 }
 
+#days {
+	background: #C5C1C0;
+}
+
 #weekdays li {
 	display: inline-block;
 	width: 14.2%;
@@ -9,13 +13,11 @@
 
 .notDay {
 	background: #C5C1C0;
-	color: #C5C1C0;
 }
 
 #days li {
 	display: inline-block;
 	width: 14.3%;
-	height: 60px;
 	padding: 0px;
 	margin: 0px;
 	border: 1px solid #C5C1C0;
@@ -23,6 +25,7 @@
 
 .day {
 	background: white;
+	height: 60px;
 	color: black;
 }
 
@@ -51,6 +54,18 @@ ul li {
 
 .cal-arrow {
 	text-align: center;
+}
+
+.blue {
+	color: #1A2930;
+}
+
+.yellow {
+	color: #F7CE3E;
+}
+
+.day:hover .yellow {
+	color: white;
 }
 
 /*
