@@ -10,32 +10,83 @@ function emulateServerReturn(data, cb) {
   }, 4);
 }
 
-export function getDayData(id, date, cb) {
-  try {
-    var dayData = readDocument('days', date);
-  }
-  catch(e) {
-    var dayData = {
-      "_id": parseInt(date),
-      "users": {
-        [id]: {
-          "_id": id,
-          "food": [],
-          "exercise": []
-        }
-      }
+var token = 'eyJpZCI6MX0='
+
+function sendXHR(verb, resource, body, cb) {
+  var xhr = new XMLHttpRequest();
+  xhr.open(verb, resource);
+  xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+
+  /* global TrackerError */
+
+  xhr.addEventListener('load', function() {
+    var statusCode = xhr.status;
+    var statusText = xhr.statusText;
+    // If success
+    if (statusCode >= 200 && statusCode < 300) {
+      cb(xhr);
+    } else {
+      var responseText = xhr.responseText;
+      TrackerError('Could not ' + verb + " " + resource + ": Received " +
+                    statusCode + " " + statusText + ": " + responseText);
     }
-    writeDocument('days', dayData)
+  });
+  // Time out the request if it takes longer than 10 sec
+  xhr.timeout = 10000;
+  // Network failure: Could not connect to server.
+  xhr.addEventListener('error', function() {
+    TrackerError('Could not ' + verb + " " + resource +
+                  ": Could not connect to the server.");
+  });
+
+  // Network failure: request took too long to complete.
+  xhr.addEventListener('timeout', function() {
+    TrackerError('Could not ' + verb + " " + resource +
+                  ": Request timed out.");
+  });
+
+  switch (typeof(body)) {
+    case 'undefined':
+      // No body to send.
+      xhr.send();
+      break;
+    case 'string':
+      // Tell the server we are sending text.
+      xhr.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
+      xhr.send(body);
+      break;
+    case 'object':
+      // Tell the server we are sending JSON.
+      xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+      // Convert body into a JSON string.
+      xhr.send(JSON.stringify(body));
+      break;
+    default:
+      throw new Error('Unknown body type: ' + typeof(body));
   }
-  emulateServerReturn(dayData.users[id], cb);
 }
 
+export function getDayData(id, date, cb) {
+  sendXHR('GET', 'user/' + id+ '/date/' + date, undefined, (xhr) =>{
+      console.log(xhr.responseText)
+      cb(JSON.parse(xhr.responseText))
+    });
+}
+
+//=====================================================================
+
 export function getDayPanelData(i, type, cb) {
-  var panelItems = [];
-  for (var item in i) {
-    panelItems.push(readDocument(type, i[item]));
+  if (i.length > 0) {
+    sendXHR('GET', 'panel/' + type + '/items/' + i.join('-'), undefined, (xhr) => {
+      cb(JSON.parse(xhr.responseText));
+    })
   }
-  emulateServerReturn(panelItems, cb);
+
+  // var panelItems = [];
+  // for (var item in i) {
+  //   panelItems.push(readDocument(type, i[item]));
+  // }
+  // emulateServerReturn(panelItems, cb);
 }
 
 export function getSearchData(name, cb) {

@@ -1,5 +1,65 @@
 // Your startup's initial mock objects go here
 var initialData = {
+  "users": {
+    "1": {
+      "_id": 1,
+      "username": "Kyle Toth",
+      "FoodDays": [1023116],
+      "ExerDays": [1023116]
+    },
+    "2": {
+      "_id": 2,
+      "username": "Someone",
+      "FoodDays": [],
+      "ExerDays": []
+    }
+  },
+  "days": {
+    "1023116": {
+      "_id": 1023116,
+      "users": {
+        "1": {
+          "_id": 1,
+          "food": [1, 2],
+          "exercise": [1]
+        }
+      }
+    }
+  },
+  "food": {
+    "1": {
+      "_id": 1,
+      "name": "Apple",
+      "calories": 95,
+      "fat": 0.3,
+      "carbs": 25,
+      "protein": 0.5,
+      "type": "food"
+    },
+    "2": {
+      "_id": 2,
+      "name": "Banana",
+      "calories": 105,
+      "fat": 0.4,
+      "carbs": 27,
+      "protein": 1.3,
+      "type": "food"
+    }
+  },
+  "exercise": {
+    "1": {
+      "_id": 1,
+      "name": "Running (1 mile)",
+      "calories": 100,
+      "type": "exercise"
+    },
+    "2": {
+      "_id": 2,
+      "name": "Walking (1 mile)",
+      "calories": 80,
+      "type": "exercise"
+    }
+  }
 
 };
 
