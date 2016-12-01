@@ -1,9 +1,2 @@
-# Ignores node dependencies (e.g. webpack).
-node_modules
-# Ignores your built application.
-build/js/app.js
-
+node_modules/
 .DS_Store
-*/.DS_Store
-
-npm-debug.log
