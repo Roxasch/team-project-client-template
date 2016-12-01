@@ -45,6 +45,14 @@ body {
 	left: 0;
 }
 
+.dailyStats {
+	width: 100%;
+}
+
+.dailyStats > tbody > tr > td:nth-child(even) {
+	text-align: right;
+}
+
 
 
 /*

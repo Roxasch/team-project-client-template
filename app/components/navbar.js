@@ -23,8 +23,8 @@ export default class Navbar extends React.Component {
         <div className="collapse navbar-collapse" id="navbar-collapse-1">
           <div className="navbar-right">
             <div className="navbar-form pull-right">
-              <Link to="/profile">
-                <button role="button" className="btn btn-default">Profile</button>
+              <Link to="/calendar">
+                <button role="button" className="btn btn-default">Calendar</button>
               </Link>
               <button href="#" role="button" className="btn btn-default">Logout</button>
             </div>

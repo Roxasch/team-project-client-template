@@ -10,32 +10,6 @@ function emulateServerReturn(data, cb) {
   }, 4);
 }
 
-export function getProfilePage(id, cb) {
-  var profileData = {};
-  profileData.user = readDocument('users', id);
-  profileData.goals = readDocument('goals', id);
-  profileData.messages = readDocument('messages', id);
-
-  emulateServerReturn(profileData, cb);
-}
-
-export function getUsername(id, cb) {
-  var user = readDocument('users', id);
-  emulateServerReturn(user.username, cb);
-}
-
-export function postMessage(id, message, cb) {
-  var messageItem = readDocument('messages', id);
-  messageItem.content.push({
-    "_id": messageItem.content.length + 1,
-    "author": id,
-    "contents": message
-  });
-  writeDocument('messages', messageItem);
-
-  emulateServerReturn(messageItem, cb);
-}
-
 export function getDayData(id, date, cb) {
   try {
     var dayData = readDocument('days', date);
@@ -73,9 +47,6 @@ export function getSearchData(name, cb) {
   emulateServerReturn(items, cb);
 }
 
-// need to add to the user...Days array depending on 
-// what it is and if this day is there already
-
 export function postDayItem(id, date, item, type, cb) {
   var dayData = readDocument('days', date);
 
@@ -86,7 +57,7 @@ export function postDayItem(id, date, item, type, cb) {
   var v = checkDay(id, parseInt(date));
   var change = false;
   var user = readDocument('users', id);
-  console.log(v)
+  
   if (v%2 == 0 && type == 'food') {
     user.FoodDays.push(parseInt(date));
     change = true;

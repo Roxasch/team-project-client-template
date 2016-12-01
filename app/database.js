@@ -10,46 +10,14 @@ var initialData = {
     "1": {
       "_id": 1,
       "username": "Kyle Toth",
-      "profilePic": "img/blank-profile.png",
       "FoodDays": [1023116],
       "ExerDays": [1023116]
     },
     "2": {
       "_id": 2,
       "username": "Someone",
-      "profilePic": "img/blank-profile.png",
       "FoodDays": [],
       "ExerDays": []
-    }
-  },
-  "goals": {
-    "1": {
-      "_id": 1,
-      "content": [
-        {
-          "_id": 1,
-          "start": 0,
-          "goal": 100,
-          "current": 50
-        }
-      ]
-    }
-  },
-  "messages": {
-    "1": {
-      "_id": 1,
-      "content": [
-        {
-          "_id": 1,
-          "contents": "this is a sample message",
-          "author": 1
-        },
-        {
-          "_id": 2,
-          "contents": "this is finally working",
-          "author": 2
-        }
-      ]
     }
   },
   "days": {
@@ -144,7 +112,6 @@ export function writeDocument(collection, changedDocument) {
   data[collection][id] = JSONClone(changedDocument);
   // Update our 'database'.
   localStorage.setItem(startupName, JSON.stringify(data));
-  console.log(data)
 }
 
 /**

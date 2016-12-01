@@ -3,6 +3,7 @@ import FoodPanel from './foodpanel';
 import ExercisePanel from './exercisepanel';
 import AddPanel from './addpanel';
 import { getDayData, postDayItem } from '../server';
+import Sidebar from './sidebar';
 
 export default class Daily extends React.Component {
 
@@ -54,6 +55,7 @@ export default class Daily extends React.Component {
   render() {
     return (
       <div>
+        <Sidebar data={this.state}/>
         <link href="css/daily.css" rel="stylesheet"/>
         <div className="col-md-1"></div>
         <div className="col-md-10 col-sm-12" id="changing-data">
