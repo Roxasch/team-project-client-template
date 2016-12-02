@@ -4,6 +4,7 @@ import Daily from './components/daily';
 import Calendar from './components/calendar';
 import Navbar from './components/navbar';
 import Sidebar from './components/sidebar';
+import ErrorBanner from './components/errorbanner';
 import { IndexRoute, Router, Route, Link, hashHistory } from 'react-router'
 
 ReactDOM.render((

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { resetDb } from '../server';
+import ResetDatabase from './resetdatabase';
 
 export default class Navbar extends React.Component {
 
@@ -31,7 +31,7 @@ export default class Navbar extends React.Component {
         <div className="collapse navbar-collapse" id="navbar-collapse-1">
           <div className="navbar-right">
             <div className="navbar-form pull-right">
-              <button className="btn btn-default" type="button" onClick={() => {resetDb()}}>Reset Mock DB</button>
+              <ResetDatabase />
               <Link to="/calendar">
                 <button role="button" className="btn btn-default">Calendar</button>
               </Link>

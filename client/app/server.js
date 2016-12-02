@@ -1,14 +1,3 @@
-import {readDocument, writeDocument, addDocument, readItems} from './database.js';
-
-/**
- * Emulates how a REST call is *asynchronous* -- it calls your function back
- * some time in the future with data.
- */
-function emulateServerReturn(data, cb) {
-  setTimeout(() => {
-    cb(data);
-  }, 4);
-}
 
 var token = 'eyJpZCI6MX0='
 
@@ -99,10 +88,6 @@ export function getDay(id, date, cb) {
           cb(xhr.responseText)})
 }
 
-function checkDay(id, date) {
-  getDay(id, date, (x) => {return x})
-}
-
 export function postDayItem(id, date, item, type, cb) {
   sendXHR('POST', '/dayItem', {
           user: id, 
@@ -113,9 +98,7 @@ export function postDayItem(id, date, item, type, cb) {
           cb(JSON.parse(xhr.responseText)));
 }
 
-//=====================================================================
 export function deleteDayItem(id, date, item, type, cb){
-  console.log(id, date, item, type)
   sendXHR('DELETE', '/dayItem', {
           user: id, 
           date: date, 

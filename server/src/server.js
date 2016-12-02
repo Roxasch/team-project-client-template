@@ -2,6 +2,7 @@
 // We should be able to run your server with node src/server.js
 var bodyParser     = require('body-parser');
 var validate       = require('express-jsonschema').validate;
+var DayItemSchema  = require('./schemas/dayitem.json')
 var database       = require('./database.js');
 var readDocument   = database.readDocument;
 var writeDocument  = database.writeDocument;
@@ -173,7 +174,7 @@ function postDayItem(id, date, item, type) {
   return user;
 }
 
-app.post('/dayitem', function(req,res) {
+app.post('/dayitem', validate({ body: DayItemSchema }), function(req,res) {
   var userid = req.body.user;
   var fromUser = getUserIdFromToken(req.get('Authorization'));
 
@@ -212,7 +213,7 @@ function deleteDayItem(id, date, item, type) {
   return dayData;
 }
 
-app.delete('/dayitem', function(req,res) {
+app.delete('/dayitem', validate({ body: DayItemSchema }), function(req,res) {
   var userid = req.body.user;
   var fromUser = getUserIdFromToken(req.get('Authorization'));
 
