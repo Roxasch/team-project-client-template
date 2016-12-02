@@ -1,7 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router';
+import { resetDb } from '../server';
 
 export default class Navbar extends React.Component {
+
+  currentDate() {
+    var currentDate = (new Date().getMonth())*100000
+                 +(new Date().getDate())*1000
+                 +(new Date().getYear());
+    return currentDate;
+  }
 
 	render() {
 		return (
@@ -16,13 +24,14 @@ export default class Navbar extends React.Component {
             <span className="icon-bar"></span>
             <span className="icon-bar"></span>
           </button>
-            <Link className="navbar-brand" to="/">
+            <Link className="navbar-brand" to={"/date/"+this.currentDate()} >
               <span className="glyphicon glyphicon-home"></span>
             </Link>
         </div>
         <div className="collapse navbar-collapse" id="navbar-collapse-1">
           <div className="navbar-right">
             <div className="navbar-form pull-right">
+              <button className="btn btn-default" type="button" onClick={() => {resetDb()}}>Reset Mock DB</button>
               <Link to="/calendar">
                 <button role="button" className="btn btn-default">Calendar</button>
               </Link>

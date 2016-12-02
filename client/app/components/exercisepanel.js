@@ -34,7 +34,7 @@ export default class ExercisePanel extends React.Component {
                 <ul>
                   {this.state.exercise.map((exer, index) => {
                     return (
-                      <ExerciseItem key={index} data={exer} />
+                      <ExerciseItem key={index} data={exer} deleteItem={(i,t) => {this.props.deleteItem(i,t)}} />
                     )
                   })}
                 </ul>

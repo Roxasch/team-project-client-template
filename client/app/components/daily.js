@@ -2,7 +2,7 @@ import React from 'react';
 import FoodPanel from './foodpanel';
 import ExercisePanel from './exercisepanel';
 import AddPanel from './addpanel';
-import { getDayData, postDayItem } from '../server';
+import { getDayData, postDayItem, deleteDayItem } from '../server';
 import Sidebar from './sidebar';
 
 export default class Daily extends React.Component {
@@ -42,7 +42,9 @@ export default class Daily extends React.Component {
 
   refresh() {
     getDayData(1, this.state.date, (dayData) => {
-      this.setState({'data': dayData});
+      this.setState({'data': []}, () => {
+        this.setState({'data': dayData})
+      });
     })
   }
 
@@ -52,7 +54,14 @@ export default class Daily extends React.Component {
     })
   }
 
+  deleteItem(item, type) {
+    deleteDayItem(1, this.state.date, item, type, () => {
+      this.refresh();
+    })
+  }
+
   render() {
+    console.log(this)
     return (
       <div>
         <Sidebar data={this.state}/>
@@ -61,8 +70,8 @@ export default class Daily extends React.Component {
         <div className="col-md-10 col-sm-12" id="changing-data">
           <div className="row">
             <div className="col-xs-12">
-              <FoodPanel data={this.state} />
-              <ExercisePanel data={this.state} />
+              <FoodPanel data={this.state} deleteItem={(i,t) => {this.deleteItem(i,t)}} />
+              <ExercisePanel data={this.state} deleteItem={(i,t) => {this.deleteItem(i,t)}} />
             </div>
           </div>
           <div className="row">

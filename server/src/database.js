@@ -20,7 +20,7 @@ var initialData = {
       "users": {
         "1": {
           "_id": 1,
-          "food": [1, 2],
+          "food": [1],
           "exercise": [1]
         }
       }
