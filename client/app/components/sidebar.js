@@ -62,7 +62,7 @@ export default class Sidebar extends React.Component {
   }
 
   dailyInfo(date) {
-    getDayData(1, date, (data) => {
+    getDayData("000000000000000000000001", ("000000000000000000000000" + date).slice(-24), (data) => {
       this.setState({'data': data}, () =>
         this.calcDayInfo())
     });

@@ -13,7 +13,6 @@ export default class FoodPanel extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(this)
     getDayPanelData(nextProps.data.data.food, 'food', (food) => {
       this.setState({'food': []});
       this.setState({'food': food});

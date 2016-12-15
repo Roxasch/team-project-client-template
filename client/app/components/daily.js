@@ -35,13 +35,13 @@ export default class Daily extends React.Component {
   }
 
   componentDidMount() {
-    getDayData(1, this.state.date, (dayData) => {
+    getDayData("000000000000000000000001", ("000000000000000000000000" + this.state.date).slice(-24), (dayData) => {
       this.setState({'data': dayData});
     })
   }
 
   refresh() {
-    getDayData(1, this.state.date, (dayData) => {
+    getDayData("000000000000000000000001", ("000000000000000000000000" + this.state.date).slice(-24), (dayData) => {
       this.setState({'data': []}, () => {
         this.setState({'data': dayData})
       });
@@ -49,19 +49,18 @@ export default class Daily extends React.Component {
   }
 
   handlePost(add, type) {
-    postDayItem(1, this.state.date, add, type, () => {
+    postDayItem("000000000000000000000001", ("000000000000000000000000" + this.state.date).slice(-24), add, type, () => {
       this.refresh();
     })
   }
 
   deleteItem(item, type) {
-    deleteDayItem(1, this.state.date, item, type, () => {
+    deleteDayItem("000000000000000000000001", ("000000000000000000000000" + this.state.date).slice(-24), item, type, () => {
       this.refresh();
     })
   }
 
   render() {
-    console.log(this)
     return (
       <div>
         <Sidebar data={this.state}/>

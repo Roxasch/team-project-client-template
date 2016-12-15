@@ -14,7 +14,7 @@ export default class CalendarDay extends React.Component {
   }
 
   componentDidMount() {
-    getDay(1, this.dateNumber(), (value) => {
+    getDay("000000000000000000000001", ("000000000000000000000000" + this.dateNumber()).slice(-24), (value) => {
       this.setState({'value': value});
     });
   }

@@ -9,15 +9,28 @@ var writeDocument  = database.writeDocument;
 var addDocument    = database.addDocument;
 var getCollection  = database.getCollection;
 var deleteDocument = database.deleteDocument;
+var ResetDatabase  = require('./resetdatabase');
+
+var mongo_express = require('mongo-express/lib/middleware');
+// Import the default Mongo Express configuration
+var mongo_express_config = require('mongo-express/config.default.js');
 
 // Creates an Express server.
 var express = require('express');
 var app = express();
 
+var MongoDB = require('mongodb');
+var MongoClient = MongoDB.MongoClient;
+var ObjectID = MongoDB.ObjectID;
+var url = 'mongodb://localhost:27017/Tracker';
+
+MongoClient.connect(url, function(err, db) {
+
 app.listen(3000, function () {
   console.log('App is listening on port 3000.');
 })
 
+app.use('/mongo_express', mongo_express(mongo_express_config));
 app.use(bodyParser.text());
 app.use(bodyParser.json());
 
@@ -33,11 +46,11 @@ function getUserIdFromToken(authorizationLine) {
     var tokenObj = JSON.parse(regularString);
     var id = tokenObj['id'];
     // Check that id is a number.
-    if (typeof id === 'number') {
+    if (typeof id === 'string') {
       return id;
     } else {
       // Not a number. Return -1, an invalid ID.
-      return -1;
+      return "";
     }
   } catch (e) {
     // Return an invalid ID.
@@ -46,25 +59,35 @@ function getUserIdFromToken(authorizationLine) {
 }
 
 // Get Day Data =============================================
-function getDayData(id, date) {
-  // If day doesn't exist in database then create it.
-  try {
-    var dayData = readDocument('days', date);
-  }
-  catch(e) {
-    var dayData = {
-      "_id": parseInt(date),
-      "users": {
-        [id]: {
-          "_id": id,
-          "food": [],
-          "exercise": []
+function getDayData(id, date, callback) {
+  db.collection('days').findOne({
+    _id: date
+  }, function(err, dayData) {
+    if (err) {
+      callback(err);
+    } else if (dayData === null) {
+      var newDay = {
+        "_id": date,
+        "users": {
+          "1": {
+            "_id":id,
+            "food": [],
+            "exercise": []
+          }
         }
       }
-    };
-    writeDocument('days', dayData);
-  }
-  return dayData.users[id];
+      db.collection('days').insertOne(newDay, function(err, dayData) {
+        if (err) {
+          callback(err);
+        } else {
+          callback(dayData)
+        }
+      })
+    } else {
+      callback(null, dayData.users[parseInt(id, 10)]);
+    }
+  })
+
 }
 
 app.get('/user/:userid/date/:date', function(req, res) {
@@ -72,153 +95,280 @@ app.get('/user/:userid/date/:date', function(req, res) {
   var fromUser = getUserIdFromToken(req.get('Authorization'));
   var date = req.params.date;
 
-  if (fromUser === parseInt(userid, 10)) {
-    res.send(getDayData(userid, date));
+  if (fromUser === userid) {
+    getDayData(new ObjectID(userid), new ObjectID(date), function(err, dayData) {
+      if (err) {
+        res.status(500).end();
+      } else if (dayData === null) {
+        res.status(400).end();
+      } else {
+        res.send(dayData);
+      }
+    })
   } else {
     res.status(401).end();
   }
 })
 
 // Get Day Panel Data ======================================
-function getDayPanelData(i, type) {
+function getDayPanelData(i, type, callback) {
   var panelItems = [];
-  for (var item in i) {
-    panelItems.push(readDocument(type, i[item]));
+
+  function getItems(index) {
+    db.collection(type).findOne({
+      _id: new ObjectID(("000000000000000000000000" + i[index]).slice(-24))
+    }, function(err, pItem) {
+      if (err) {
+        return callback(err);
+      } else {
+        panelItems.push(pItem);
+        if (panelItems.length === i.length) {
+          callback(null, panelItems);
+        } else {
+          getItems(index + 1);
+        }
+      }
+    })
   }
-  return panelItems
+
+  if (i.length === 0) {
+    callback(null, panelItems);
+  } else {
+    getItems(0);
+  }
+
 }
 
 app.get('/panel/:type/items/:number', function(req, res) {
   var type = req.params.type;
   var number = req.params.number.split('-');
-  res.send(getDayPanelData(number, type));
+  getDayPanelData(number, type, function(err, data) {
+    if (err) {
+      res.status(500).end();
+    } else if (data === null) {
+      res.status(400).end();
+    } else {
+      res.send(data);
+    }
+  })
 })
 
 app.get('/panel/:type/items', function(req, res) {
   var type = req.params.type;
   var number = [];
-  res.send(getDayPanelData(number, type));
+  getDayPanelData(number, type, function(err, data) {
+    if (err) {
+      res.status(500).end();
+    } else if (data === null) {
+      res.status(400).end();
+    } else {
+      res.send(data);
+    }
+  })
 })
 
 // Get Search Data ========================================
-function getSearchData(name) {
+function getSearchData(name, callback) {
   var items = [];
   var data = [];
   var food = getCollection('food');
   var exer = getCollection('exercise');
 
-  for (var f in food) data.push(food[f]);
-  for (var e in exer) data.push(exer[e]);
-
-  for (var i in data) {
-    if (data[i].name.toLowerCase().includes(name.toLowerCase())) items.push(data[i]);
-  }
-  return items
+  db.collection('food').find().toArray(function(err, food) {
+    if (err) {
+      callback(err);
+    } else {
+      db.collection('exercise').find().toArray(function(err, exer) {
+        if (err) {
+          callback(err);
+        } else {
+          for (var f in food) data.push(food[f]);
+          for (var e in exer) data.push(exer[e]);
+          for (var i in data) {
+            if (data[i].name.toLowerCase().includes(name.toLowerCase())) items.push(data[i]);
+          }
+          callback(null, items)
+        }
+      })
+    }
+  })
 }
 
 app.get('/search/:name', function(req, res) {
   var name = req.params.name;
-  res.send(getSearchData(name));
+
+  getSearchData(name, function(err, searchData) {
+    if (err) {
+      res.status(500).end();
+    } else if (searchData === null) {
+      res.status(400).end();
+    } else {
+      res.send(searchData);
+    }
+  })
 })
 
 app.get('/search', function(req, res) {
-  res.send(getSearchData(''));
+  getSearchData('', function(err, searchData) {
+    if (err) {
+      res.status(500).end();
+    } else if (searchData === null) {
+      res.status(400).end();
+    } else {
+      res.send(searchData);
+    }
+  })
 })
 
 // Check Day ==============================================
-function checkDay(id, date) {
-  var user = readDocument('users', id);
-  var returnValue = 0;
+function checkDay(id, date, callback) {
+  db.collection('users').findOne({
+    _id: id
+  }, function(err, userData) {
+    if (err) {
+      return callback(err);
+    } else if (userData === null) {
+      return callback(null, null);
+    }
 
-  var fd = Array.from(user.FoodDays);
-  var ed = Array.from(user.ExerDays);
-  if (fd.indexOf(parseInt(date)) > -1) returnValue+=1;
-  if (ed.indexOf(parseInt(date)) > -1) returnValue+=2;
-  return returnValue.toString();
+    var returnValue = 0;
+    var fd = Array.from(userData.FoodDays);
+    var ed = Array.from(userData.ExerDays);
+
+    if (fd.indexOf(parseInt(date, 10)) > -1) returnValue+=1;
+    if (ed.indexOf(parseInt(date, 10)) > -1) returnValue+=2;
+
+    callback(null, returnValue);
+  })
 }
 
-app.get('/user/:user/check/:date', function(req, res) {
-  var userid = req.params.user;
+app.get('/user/:userid/check/:date', function(req, res) {
+  var userid = req.params.userid;
   var fromUser = getUserIdFromToken(req.get('Authorization'));
   var date = req.params.date;
-
-  if (fromUser === parseInt(userid, 10)) {
-    res.send(checkDay(userid, date));
+  if (fromUser === userid) {
+    checkDay(new ObjectID(userid), new ObjectID(date), function(err, cDay) {
+      if (err) {
+        res.status(500).end();
+      } else if (cDay === null) {
+        res.status(400).end();
+      } else {
+        res.send(cDay.toString());
+      }
+    })
   } else {
     res.status(401).end();
   }
 })
 
 // Post Daily Item ========================================
-function postDayItem(id, date, item, type) {
-  var dayData = readDocument('days', date);
+function postDayItem(id, date, item, type, callback) {
+  var itemNum = parseInt(item, 10)
+  var userNum = parseInt(id, 10).toString()
 
-  var userData = dayData.users[id];
-  userData[type].push(item);
-  writeDocument('days', dayData);
-
-  var v = checkDay(id, parseInt(date));
-  var change = false;
-  var user = readDocument('users', id);
-  
-  if (v%2 == 0 && type == 'food') {
-    user.FoodDays.push(parseInt(date));
-    change = true;
-  }
-  if (v < 2 && type == 'exercise') {
-    user.ExerDays.push(parseInt(date));
-    change = true;
-  }
-  if (change) writeDocument('users', user);
-
-  return user;
+  db.collection('days').updateOne({
+    _id: new ObjectID(date)
+  }, {$push: {[`users.${userNum}.${type}`]: itemNum}}, function(err, post) {
+    if (err) {
+      callback(err);
+    } else {
+      switch (type){
+        case 'food':
+          var userType = 'FoodDays';
+          break
+        case 'exercise':
+          var userType = 'ExerDays';
+          break
+      }
+      db.collection('users').updateOne({
+        _id: new ObjectID(id)
+      }, {$addToSet: {[`${userType}`]: parseInt(date, 10)}}, function(err, u) {
+        if (err) {
+          callback(err);
+        } else {
+          callback(null, u);
+        }
+      })
+    }
+  })
 }
 
 app.post('/dayitem', validate({ body: DayItemSchema }), function(req,res) {
-  var userid = req.body.user;
+  var userid = req.body['user'];
   var fromUser = getUserIdFromToken(req.get('Authorization'));
-
-  if (fromUser === parseInt(userid, 10)) {
-    res.send(postDayItem(userid, req.body.date, req.body.item, req.body.type));
+  if (fromUser === userid) {
+    postDayItem(userid, req.body['date'], req.body['item'], req.body['type'], function(err, postData) {
+      if (err) {
+        res.status(500).end();
+      } else {
+        res.send(postData);
+      }
+    })
   } else {
     res.status(401).end();
   }
 })
 
 // Delete Day Item ========================================
-function deleteDayItem(id, date, item, type) {
-  var dayData = readDocument('days', date);
+function deleteDayItem(id, date, item, type, callback) {
+  var itemNum = parseInt(item, 10)
+  var userNum = parseInt(id, 10).toString()
 
-  var userData = dayData.users[id];
-  var index = userData[type].indexOf(item);
-  userData[type].splice(index, 1);
-  writeDocument('days', dayData);
-
-  if (userData[type].length == 0) {
-    var user = readDocument('users', id);
-    switch(type) {
-      case('food'):
-        var i = user.FoodDays.indexOf(date);
-        user.FoodDays.splice(i, 1);
-        writeDocument('users', user);
-        break;
-      case('exercise'):
-        var i = user.ExerDays.indexOf(date);
-        user.ExerDays.splice(i, 1);
-        writeDocument('users', user);
-        break;
-    }
-  }
-
-  return dayData;
+  db.collection('days').findOne({
+    _id: new ObjectID(date)
+  }, function(err, b) {
+    var i = b.users[userNum][type].indexOf(itemNum)
+    b.users[userNum][type].splice(i, 1);
+    var a = b.users[userNum][type]
+    db.collection('days').updateOne({
+      _id: new ObjectID(date)
+    }, {$set: {[`users.${userNum}.${type}`]: a}}, function(err, post) {
+      if (err) {
+        callback(err);
+      } else {
+        db.collection('days').findOne({
+          _id: new ObjectID(date)
+        }, function(err, us) {
+          if (us.users[userNum].food.length == 0 && type === 'food') {
+            db.collection('users').updateOne({
+              _id: new ObjectID(id)
+            }, {$pull: {FoodDays: parseInt(date, 10)}}, function(err, u) {
+              if (err) {
+                callback(err);
+              } else {
+                callback(null, u);
+              }
+            })
+          } else if (us.users[userNum].exercise.length == 0 && type === 'exercise') {
+            db.collection('users').updateOne({
+              _id: new ObjectID(id)
+            }, {$pull: {ExerDays: parseInt(date, 10)}}, function(err, u) {
+              if (err) {
+                callback(err);
+              } else {
+                callback(null, u);
+              }
+            })
+          } else {
+            callback(null, post)
+          }
+        })
+      }
+    })
+  })
 }
 
 app.delete('/dayitem', validate({ body: DayItemSchema }), function(req,res) {
-  var userid = req.body.user;
+  var userid = req.body['user'];
   var fromUser = getUserIdFromToken(req.get('Authorization'));
-
-  if (fromUser === parseInt(userid, 10)) {
-    res.send(deleteDayItem(userid, req.body.date, req.body.item, req.body.type));
+  if (fromUser === userid) {
+    deleteDayItem(userid, req.body['date'], req.body['item'], req.body['type'], function(err, deleteData) {
+      if (err) {
+        res.status(500).end();
+      } else {
+        res.send(deleteData);
+      }
+    })
   } else {
     res.status(401).end();
   }
@@ -229,9 +379,9 @@ app.delete('/dayitem', validate({ body: DayItemSchema }), function(req,res) {
 app.post('/resetdb', function(req, res) {
   console.log("Resetting database...");
   // This is a debug route, so don't do any validation.
-  database.resetDatabase();
-  // res.send() sends an empty response with status code 200
-  res.send();
+  ResetDatabase(db, function() {
+    res.send();
+  })
 });
 
 // Translates JSON failures to 400s
@@ -241,4 +391,5 @@ app.use(function(err, req, res, next) {
   } else {
     next(err);
   }
+})
 })
